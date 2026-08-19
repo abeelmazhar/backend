@@ -2,6 +2,8 @@ import express from "express";
 
 const app = express();
 
+app.use(express.json());
+
 const PORT: number = 3000;
 
 app.get("/hello", (req, res) => {
@@ -19,6 +21,15 @@ app.get("/about", (req, res) => {
 app.get("/users", (req, res) => {
   res.json({
     users: [],
+  });
+});
+
+app.post("/users", (req, res) => {
+  console.log(req.body);
+
+  res.status(201).json({
+    message: "User created",
+    user: req.body,
   });
 });
 
