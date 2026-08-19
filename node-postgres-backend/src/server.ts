@@ -1,10 +1,13 @@
 import express from "express";
+import userRoutes from "./routes/user.routes.js";
 
 const app = express();
 
+const PORT: number = 3000;
+
 app.use(express.json());
 
-const PORT: number = 3000;
+app.use("/users", userRoutes);
 
 app.get("/hello", (req, res) => {
   res.json({
@@ -15,21 +18,6 @@ app.get("/hello", (req, res) => {
 app.get("/about", (req, res) => {
   res.json({
     message: "This is my TypeScript backend",
-  });
-});
-
-app.get("/users", (req, res) => {
-  res.json({
-    users: [],
-  });
-});
-
-app.post("/users", (req, res) => {
-  console.log(req.body);
-
-  res.status(201).json({
-    message: "User created",
-    user: req.body,
   });
 });
 
