@@ -10,7 +10,7 @@ app.use(express.json());
 
 // app.use(logger);
 
-app.use("/users", authMiddleware, userRoutes);
+app.use("/users", userRoutes);
 
 app.get("/hello", (req, res) => {
   res.json({
