@@ -1,5 +1,6 @@
 import express from "express";
 import userRoutes from "./routes/user.routes.js";
+import { logger, authMiddleware } from "./middleware/logger.middleware.js";
 
 const app = express();
 
@@ -7,7 +8,9 @@ const PORT: number = 3000;
 
 app.use(express.json());
 
-app.use("/users", userRoutes);
+// app.use(logger);
+
+app.use("/users", authMiddleware, userRoutes);
 
 app.get("/hello", (req, res) => {
   res.json({
