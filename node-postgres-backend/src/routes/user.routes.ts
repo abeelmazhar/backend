@@ -4,12 +4,14 @@ import {
   createUser,
   getUserById,
 } from "../controllers/user.controller.js";
+import { validate } from "../middleware/validate.middleware.js";
+import { createUserSchema } from "../schemas/user.schema.js";
 
 const router = Router();
 
 router.get("/", getUsers);
 
-router.post("/", createUser);
+router.post("/", validate(createUserSchema), createUser);
 
 router.get("/:id", getUserById);
 
