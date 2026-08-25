@@ -8,3 +8,5 @@ export const createUserSchema = z.object({
 
   email: z.string().email("Invalid email address"),
 });
+
+export const updateUserSchema = createUserSchema.partial();

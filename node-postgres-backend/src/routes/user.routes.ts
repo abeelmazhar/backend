@@ -7,7 +7,7 @@ import {
   updateUser,
 } from "../controllers/user.controller.js";
 import { validate } from "../middleware/validate.js";
-import { createUserSchema } from "../schemas/user.schema.js";
+import { createUserSchema, updateUserSchema } from "../schemas/user.schema.js";
 const router = Router();
 
 router.get("/", getUsers);
@@ -16,7 +16,7 @@ router.get("/:id", getUserById);
 
 router.post("/", validate(createUserSchema), createUser);
 
-router.patch("/:id", updateUser);
+router.patch("/:id", validate(updateUserSchema), updateUser);
 
 router.delete("/:id", deleteUser);
 
