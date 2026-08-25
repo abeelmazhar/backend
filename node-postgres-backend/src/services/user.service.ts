@@ -1,70 +1,28 @@
-export interface User {
-  id: number;
-  name: string;
-  email: string;
-}
+import { pool } from "../config/database.js";
 
-let users: User[] = [
-  {
-    id: 1,
-    name: "Ali",
-    email: "ali@gmail.com",
-  },
-  {
-    id: 2,
-    name: "Ahmed",
-    email: "ahmed@gmail.com",
-  },
-];
+// Get all users
+export const getUsers = async () => {
+  const result = await pool.query(
+    `
+    SELECT id, name, email, created_at
+    FROM users
+    ORDER BY id
+    `,
+  );
 
-export const getUsers = () => {
-  return users;
+  return result.rows;
 };
 
-export const getUserById = (id: number) => {
-  return users.find((user) => user.id === id);
-};
+// Get a user by id
+export const getUserById = async (id: number) => {
+  const result = await pool.query(
+    `
+    SELECT id, name, email, created_at
+    FROM users
+    WHERE id = $1
+    `,
+    [id],
+  );
 
-export const createUser = (name: string, email: string) => {
-  const newUser: User = {
-    id: users.length + 1,
-    name,
-    email,
-  };
-
-  users.push(newUser);
-
-  return newUser;
-};
-
-export const updateUser = (id: number, data: Partial<Omit<User, "id">>) => {
-  const user = users.find((user) => user.id === id);
-
-  if (!user) {
-    return undefined;
-  }
-
-  if (data.name !== undefined) {
-    user.name = data.name;
-  }
-
-  if (data.email !== undefined) {
-    user.email = data.email;
-  }
-
-  return user;
-};
-
-export const deleteUser = (id: number) => {
-  const userIndex = users.findIndex((user) => user.id === id);
-
-  if (userIndex === -1) {
-    return undefined;
-  }
-
-  const deletedUser = users[userIndex];
-
-  users.splice(userIndex, 1);
-
-  return deletedUser;
+  return result.rows[0];
 };

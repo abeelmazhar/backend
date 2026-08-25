@@ -8,12 +8,3 @@ export const pool = new Pool({
   password: process.env.DB_PASSWORD,
   database: process.env.DB_NAME,
 });
-pool
-  .query("SELECT NOW()")
-  .then((result) => {
-    console.log("Database connected!");
-    console.log(result.rows);
-  })
-  .catch((error) => {
-    console.error("Database connection failed:", error);
-  });
