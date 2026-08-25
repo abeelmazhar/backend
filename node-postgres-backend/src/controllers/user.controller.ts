@@ -62,3 +62,55 @@ export const createUser = async (req: Request, res: Response) => {
     });
   }
 };
+
+// Update a user
+export const updateUser = async (req: Request, res: Response) => {
+  try {
+    const id = Number(req.params.id);
+
+    const { name, email } = req.body;
+
+    const user = await userService.updateUser(id, name, email);
+
+    if (!user) {
+      res.status(404).json({
+        message: "User not found",
+      });
+      return;
+    }
+
+    res.status(200).json({
+      user,
+    });
+  } catch (error) {
+    console.error(error);
+
+    res.status(500).json({
+      message: "Internal server error",
+    });
+  }
+};
+
+// Delete a user
+export const deleteUser = async (req: Request, res: Response) => {
+  try {
+    const id = Number(req.params.id);
+
+    const user = await userService.deleteUser(id);
+
+    if (!user) {
+      res.status(404).json({
+        message: "User not found",
+      });
+      return;
+    }
+
+    res.status(204).send();
+  } catch (error) {
+    console.error(error);
+
+    res.status(500).json({
+      message: "Internal server error",
+    });
+  }
+};

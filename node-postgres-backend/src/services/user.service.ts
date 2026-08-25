@@ -40,3 +40,35 @@ export const createUser = async (name: string, email: string) => {
 
   return result.rows[0];
 };
+
+// Update a user
+export const updateUser = async (id: number, name?: string, email?: string) => {
+  const result = await pool.query(
+    `
+    UPDATE users
+    SET
+      name = COALESCE($1, name),
+      email = COALESCE($2, email)
+    WHERE id = $3
+    RETURNING id, name, email, created_at
+    `,
+    [name, email, id],
+  );
+
+  return result.rows[0];
+};
+
+// Delete a user
+
+export const deleteUser = async (id: number) => {
+  const result = await pool.query(
+    `
+    DELETE FROM users
+    WHERE id = $1
+    RETURNING id,
+    `,
+    [id],
+  );
+
+  return result.rows[0];
+};
