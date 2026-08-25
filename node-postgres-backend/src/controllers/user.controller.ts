@@ -43,3 +43,22 @@ export const getUserById = async (req: Request, res: Response) => {
     });
   }
 };
+
+// Create a user
+export const createUser = async (req: Request, res: Response) => {
+  try {
+    const { name, email } = req.body;
+
+    const user = await userService.createUser(name, email);
+
+    res.status(201).json({
+      user,
+    });
+  } catch (error) {
+    console.error(error);
+
+    res.status(500).json({
+      message: "Internal server error",
+    });
+  }
+};

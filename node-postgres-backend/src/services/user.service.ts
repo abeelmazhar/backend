@@ -26,3 +26,17 @@ export const getUserById = async (id: number) => {
 
   return result.rows[0];
 };
+
+// Create a user
+export const createUser = async (name: string, email: string) => {
+  const result = await pool.query(
+    `
+    INSERT INTO users (name, email)
+    VALUES ($1, $2)
+    RETURNING id, name, email, created_at
+    `,
+    [name, email],
+  );
+
+  return result.rows[0];
+};
