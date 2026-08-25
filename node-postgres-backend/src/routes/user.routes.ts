@@ -6,17 +6,21 @@ import {
   getUsers,
   updateUser,
 } from "../controllers/user.controller.js";
-import { validate } from "../middleware/validate.js";
-import { createUserSchema, updateUserSchema } from "../schemas/user.schema.js";
+import { validateBody, validateParams } from "../middleware/validate.js";
+import {
+  createUserSchema,
+  updateUserSchema,
+  userIdSchema,
+} from "../schemas/user.schema.js";
 const router = Router();
 
 router.get("/", getUsers);
 
-router.get("/:id", getUserById);
+router.get("/:id", validateParams(userIdSchema), getUserById);
 
-router.post("/", validate(createUserSchema), createUser);
+router.post("/", validateBody(createUserSchema), createUser);
 
-router.patch("/:id", validate(updateUserSchema), updateUser);
+router.patch("/:id", validateParams(userIdSchema), updateUser);
 
 router.delete("/:id", deleteUser);
 
