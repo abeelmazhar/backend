@@ -1,7 +1,7 @@
 import bcrypt from "bcrypt";
 import { pool } from "../config/database.js";
 import { AppError } from "../errors/app.error.js";
-
+import jwt from "jsonwebtoken";
 export const registerUser = async (
   name: string,
   email: string,
@@ -55,7 +55,15 @@ export const loginUser = async (email: string, password: string) => {
   );
 
   const user = result.rows[0];
-
+  const token = jwt.sign(
+    {
+      sub: user.id,
+    },
+    process.env.JWT_SECRET!,
+    {
+      expiresIn: "1h",
+    },
+  );
   if (!user) {
     throw new AppError(401, "Invalid email or password");
   }
@@ -68,5 +76,5 @@ export const loginUser = async (email: string, password: string) => {
 
   // JWT will be created here
 
-  return user;
+  return { user, token };
 };
