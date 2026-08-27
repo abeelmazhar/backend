@@ -1,6 +1,6 @@
 import bcrypt from "bcrypt";
 import { pool } from "../config/database.js";
-import { AppError } from "../utils/app-error.js";
+import { AppError } from "../errors/app.error.js";
 
 export const registerUser = async (
   name: string,
@@ -17,7 +17,7 @@ export const registerUser = async (
   );
 
   if (existingUser.rows[0]) {
-    throw new Error("Email already exists");
+    throw new AppError(409, "Email already exists");
   }
 
   const passwordHash = await bcrypt.hash(password, 12);
@@ -57,13 +57,13 @@ export const loginUser = async (email: string, password: string) => {
   const user = result.rows[0];
 
   if (!user) {
-    throw new AppError("Invalid email or password", 401);
+    throw new AppError(401, "Invalid email or password");
   }
 
   const passwordMatches = await bcrypt.compare(password, user.password_hash);
 
   if (!passwordMatches) {
-    throw new AppError("Invalid email or password", 401);
+    throw new AppError(401, "Invalid email or password");
   }
 
   // JWT will be created here
