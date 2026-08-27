@@ -23,10 +23,22 @@ export const authenticate = (
   try {
     const payload = jwt.verify(token, process.env.JWT_SECRET!);
 
-    // We'll attach user information here
+    if (
+      typeof payload !== "object" ||
+      payload === null ||
+      !("sub" in payload)
+    ) {
+      throw new AppError(401, "Invalid token");
+    }
+
+    req.userId = Number(payload.sub);
 
     next();
-  } catch {
+  } catch (error) {
+    if (error instanceof AppError) {
+      throw error;
+    }
+
     throw new AppError(401, "Invalid or expired token");
   }
 };

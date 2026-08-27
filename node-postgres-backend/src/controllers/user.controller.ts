@@ -104,3 +104,17 @@ export const deleteUser = async (req: Request, res: Response) => {
     });
   }
 };
+
+export const getCurrentUser = async (req: Request, res: Response) => {
+  const userId = req.userId!;
+
+  const user = await userService.getUserById(userId);
+
+  if (!user) {
+    throw new AppError(404, "User not found");
+  }
+
+  res.status(200).json({
+    user,
+  });
+};
