@@ -1,44 +1,44 @@
 import { Request, Response, NextFunction } from "express";
-
 import jwt from "jsonwebtoken";
-import { AppError } from "../errors/app.error.js";
+
+interface JwtPayload {
+  userId: number;
+}
+
+export interface AuthRequest extends Request {
+  userId?: number;
+}
 
 export const authenticate = (
-  req: Request,
+  req: AuthRequest,
   res: Response,
   next: NextFunction,
 ) => {
-  const authorization = req.headers.authorization;
-
-  if (!authorization) {
-    throw new AppError(401, "Authentication required");
-  }
-
-  const [scheme, token] = authorization.split(" ");
-
-  if (scheme !== "Bearer" || !token) {
-    throw new AppError(401, "Invalid authorization header");
-  }
-
   try {
-    const payload = jwt.verify(token, process.env.JWT_SECRET!);
+    const authHeader = req.headers.authorization;
 
-    if (
-      typeof payload !== "object" ||
-      payload === null ||
-      !("sub" in payload)
-    ) {
-      throw new AppError(401, "Invalid token");
+    if (!authHeader) {
+      return res.status(401).json({
+        message: "Authorization header missing",
+      });
     }
 
-    req.userId = Number(payload.sub);
+    const token = authHeader.split(" ")[1];
+
+    if (!token) {
+      return res.status(401).json({
+        message: "Token missing",
+      });
+    }
+
+    const decoded = jwt.verify(token, process.env.JWT_SECRET!) as JwtPayload;
+
+    req.userId = decoded.userId;
 
     next();
   } catch (error) {
-    if (error instanceof AppError) {
-      throw error;
-    }
-
-    throw new AppError(401, "Invalid or expired token");
+    return res.status(401).json({
+      message: "Invalid or expired token",
+    });
   }
 };

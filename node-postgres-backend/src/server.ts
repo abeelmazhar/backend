@@ -5,6 +5,8 @@ import { errorHandler } from "./middleware/error.middleware.js";
 import authRoutes from "./routes/auth.routes.js";
 import { authenticate } from "./middleware/auth.middleware.js";
 import { getCurrentUser } from "./controllers/user.controller.js";
+import { authorize } from "./middleware/authorize.middleware.js";
+import adminRoutes from "./routes/admin.routes.js";
 const app = express();
 
 const PORT = Number(process.env.PORT) || 3000;
@@ -13,6 +15,7 @@ app.use(express.json());
 
 app.use("/users", userRoutes);
 app.use("/auth", authRoutes);
+app.use("/admin", adminRoutes);
 app.get("/me", authenticate, getCurrentUser);
 app.use(errorHandler);
 
