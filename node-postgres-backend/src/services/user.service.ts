@@ -4,7 +4,7 @@ import { pool } from "../config/database.js";
 export const getUsers = async () => {
   const result = await pool.query(
     `
-    SELECT id, name, email, created_at
+    SELECT id, name, email,role, created_at
     FROM users
     ORDER BY id
     `,
