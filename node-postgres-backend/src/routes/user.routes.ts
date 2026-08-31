@@ -6,6 +6,8 @@ import {
   getUsers,
   updateUser,
 } from "../controllers/user.controller.js";
+import { getUserOrders } from "../controllers/order.controller.js";
+import { authenticate } from "../middleware/auth.middleware.js";
 import { validateBody, validateParams } from "../middleware/validate.js";
 import {
   createUserSchema,
@@ -15,6 +17,13 @@ import {
 const router = Router();
 
 router.get("/", getUsers);
+
+router.get(
+  "/:id/orders",
+  // authenticate,
+  //validateParams(userIdSchema),
+  getUserOrders,
+);
 
 router.get("/:id", validateParams(userIdSchema), getUserById);
 
