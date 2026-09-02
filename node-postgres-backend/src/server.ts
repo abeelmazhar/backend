@@ -7,6 +7,7 @@ import { authenticate } from "./middleware/auth.middleware.js";
 import { getCurrentUser } from "./controllers/user.controller.js";
 import { authorize } from "./middleware/authorize.middleware.js";
 import adminRoutes from "./routes/admin.routes.js";
+import rateLimit from "express-rate-limit";
 import helmet from "helmet";
 import cors from "cors";
 const app = express();
