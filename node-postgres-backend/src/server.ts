@@ -8,6 +8,7 @@ import { getCurrentUser } from "./controllers/user.controller.js";
 import { authorize } from "./middleware/authorize.middleware.js";
 import adminRoutes from "./routes/admin.routes.js";
 import uploadRoutes from "./routes/upload.routes.js";
+import emailRoutes from "./routes/email.routes.js";
 import { emailTransporter } from "./config/email.js";
 import helmet from "helmet";
 import cors from "cors";
@@ -44,6 +45,9 @@ app.get("/me", authenticate, getCurrentUser);
 
 // Upload routes
 app.use("/api", uploadRoutes);
+
+// Email routes
+app.use("/api/email", emailRoutes);
 
 app.use(errorHandler);
 
