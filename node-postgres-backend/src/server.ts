@@ -7,7 +7,7 @@ import { authenticate } from "./middleware/auth.middleware.js";
 import { getCurrentUser } from "./controllers/user.controller.js";
 import { authorize } from "./middleware/authorize.middleware.js";
 import adminRoutes from "./routes/admin.routes.js";
-import rateLimit from "express-rate-limit";
+import uploadRoutes from "./routes/upload.routes.js";
 import helmet from "helmet";
 import cors from "cors";
 const app = express();
@@ -30,6 +30,10 @@ app.use("/users", userRoutes);
 app.use("/auth", authRoutes);
 app.use("/admin", adminRoutes);
 app.get("/me", authenticate, getCurrentUser);
+
+// Upload routes
+app.use("/api", uploadRoutes);
+
 app.use(errorHandler);
 
 app.listen(PORT, () => {
