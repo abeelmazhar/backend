@@ -4,6 +4,7 @@ export interface User {
   email: string;
   password_hash: string;
   role: UserRole;
+  is_verified: boolean;
   created_at: Date;
 }
 

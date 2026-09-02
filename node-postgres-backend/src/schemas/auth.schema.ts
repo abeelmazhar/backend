@@ -13,3 +13,7 @@ export const loginSchema = z.object({
 
   password: z.string().min(8).max(100),
 });
+
+export const verifyEmailSchema = z.object({
+  token: z.string().min(1, "Verification token is required"),
+});

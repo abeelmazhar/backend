@@ -1,10 +1,14 @@
 import { Router } from "express";
 
-import { register, login } from "../controllers/auth.controller.js";
+import { register, login, verifyEmail } from "../controllers/auth.controller.js";
 
-import { validateBody } from "../middleware/validate.js";
+import { validateBody, validateQuery } from "../middleware/validate.js";
 
-import { registerSchema, loginSchema } from "../schemas/auth.schema.js";
+import {
+  registerSchema,
+  loginSchema,
+  verifyEmailSchema,
+} from "../schemas/auth.schema.js";
 
 import rateLimit from "express-rate-limit";
 
@@ -16,8 +20,21 @@ const loginLimiter = rateLimit({
     message: "Too many login attempts. Try again later.",
   },
 });
+
 router.post("/register", validateBody(registerSchema), register);
 
-router.post("/login", validateBody(loginSchema), login, loginLimiter);
+router.post("/login", loginLimiter, validateBody(loginSchema), login);
+
+router.get(
+  "/verify-email",
+  validateQuery(verifyEmailSchema),
+  verifyEmail,
+);
+
+router.post(
+  "/verify-email",
+  validateBody(verifyEmailSchema),
+  verifyEmail,
+);
 
 export default router;

@@ -2,6 +2,9 @@ import bcrypt from "bcrypt";
 import { pool } from "../config/database.js";
 import { AppError } from "../errors/app.error.js";
 import jwt from "jsonwebtoken";
+import * as emailService from "./email.service.js";
+import * as verificationService from "./verification.service.js";
+
 export const registerUser = async (
   name: string,
   email: string,
@@ -30,15 +33,21 @@ export const registerUser = async (
       password_hash
     )
     VALUES ($1, $2, $3)
-    RETURNING id, name, email, role, created_at
+    RETURNING id, name, email, role, is_verified, created_at
     `,
     [name, email, passwordHash],
   );
 
-  return result.rows[0];
-};
+  const user = result.rows[0];
 
-// login user
+  const verificationToken = await verificationService.createVerificationToken(
+    user.id,
+  );
+
+  await emailService.sendVerificationEmail(user.email, verificationToken);
+
+  return user;
+};
 
 export const loginUser = async (email: string, password: string) => {
   const result = await pool.query(
@@ -47,7 +56,8 @@ export const loginUser = async (email: string, password: string) => {
       id,
       name,
       email,
-      password_hash
+      password_hash,
+      is_verified
     FROM users
     WHERE email = $1
     `,
@@ -55,15 +65,7 @@ export const loginUser = async (email: string, password: string) => {
   );
 
   const user = result.rows[0];
-  const token = jwt.sign(
-    {
-      userId: user.id,
-    },
-    process.env.JWT_SECRET!,
-    {
-      expiresIn: "1h",
-    },
-  );
+
   if (!user) {
     throw new AppError(401, "Invalid email or password");
   }
@@ -74,7 +76,23 @@ export const loginUser = async (email: string, password: string) => {
     throw new AppError(401, "Invalid email or password");
   }
 
-  // JWT will be created here
+  if (!user.is_verified) {
+    throw new AppError(403, "Please verify your email before logging in");
+  }
+
+  const token = jwt.sign(
+    {
+      userId: user.id,
+    },
+    process.env.JWT_SECRET!,
+    {
+      expiresIn: "1h",
+    },
+  );
 
   return { user, token };
+};
+
+export const verifyEmail = async (token: string) => {
+  return verificationService.verifyEmailToken(token);
 };
