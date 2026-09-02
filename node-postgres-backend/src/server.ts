@@ -8,12 +8,23 @@ import { getCurrentUser } from "./controllers/user.controller.js";
 import { authorize } from "./middleware/authorize.middleware.js";
 import adminRoutes from "./routes/admin.routes.js";
 import uploadRoutes from "./routes/upload.routes.js";
+import { emailTransporter } from "./config/email.js";
 import helmet from "helmet";
 import cors from "cors";
 const app = express();
 
-const PORT = Number(process.env.PORT) || 3000;
+async function testEmailConnection() {
+  try {
+    await emailTransporter.verify();
 
+    console.log("SMTP connection successful");
+  } catch (error) {
+    console.error("SMTP connection failed", error);
+  }
+}
+
+const PORT = Number(process.env.PORT) || 3000;
+testEmailConnection();
 app.use(helmet());
 app.use(
   cors({
