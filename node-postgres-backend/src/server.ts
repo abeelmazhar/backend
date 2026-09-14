@@ -12,6 +12,7 @@ import emailRoutes from "./routes/email.routes.js";
 import { emailTransporter } from "./config/email.js";
 import helmet from "helmet";
 import cors from "cors";
+import { connectRedis } from "./config/redis.js";
 const app = express();
 
 async function testEmailConnection() {
@@ -50,6 +51,8 @@ app.use("/api", uploadRoutes);
 app.use("/api/email", emailRoutes);
 
 app.use(errorHandler);
+
+await connectRedis();
 
 app.listen(PORT, () => {
   console.log(`Server running on port ${PORT}`);
