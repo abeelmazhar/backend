@@ -86,6 +86,10 @@ app.get("/", (req, res) => {
 io.on("connection", (socket) => {
   console.log("Client connected:", socket.id);
 
+  socket.emit("welcome", {
+    message: "Welcome to our real-time server!",
+  });
+
   socket.on("disconnect", () => {
     console.log("Client disconnected:", socket.id);
   });
