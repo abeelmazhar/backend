@@ -98,3 +98,68 @@ io.on("connection", (socket) => {
 httpServer.listen(PORT, () => {
   console.log(`Server running on port ${PORT}`);
 });
+io.on("connection", (socket) => {
+  console.log("Client connected:", socket.id);
+
+  socket.on("hello-server", (data) => {
+    console.log("Received:", data);
+  });
+});
+
+// import express from "express";
+
+// const app = express();
+// const PORT = 3000;
+
+// app.use(express.json());
+
+// function getCookie(req: express.Request, name: string) {
+//   const raw = req.headers.cookie || "";
+//   const match = raw
+//     .split(";")
+//     .map((c) => c.trim())
+//     .find((c) => c.startsWith(`${name}=`));
+//   return match?.split("=")[1];
+// }
+
+// function requireAuth(
+//   req: express.Request,
+//   res: express.Response,
+//   next: express.NextFunction,
+// ) {
+//   if (getCookie(req, "auth") === "true") return next();
+//   return res.status(401).json({ message: "Unauthorized" });
+// }
+
+// app.post("/login", (req, res) => {
+//   const { email, password } = req.body;
+
+//   if (email === "hi@gmail.com" && password === "12345") {
+//     res.cookie("auth", "true", {
+//       httpOnly: true,
+//       maxAge: 60 * 1000, // 1 minute
+//     });
+//     return res.json({ message: "Login successful" });
+//   }
+
+//   return res.status(401).json({ message: "Invalid email or password" });
+// });
+
+// app.post("/logout", (req, res) => {
+//   res.clearCookie("auth");
+//   return res.json({ message: "Logged out" });
+// });
+
+// app.get("/data", requireAuth, (req, res) => {
+//   return res.json({
+//     message: "Protected testing data",
+//     items: [
+//       { id: 1, name: "Item A" },
+//       { id: 2, name: "Item B" },
+//     ],
+//   });
+// });
+
+// app.listen(PORT, () => {
+//   console.log(`Server running on port ${PORT}`);
+// });
