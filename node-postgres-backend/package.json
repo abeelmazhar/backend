@@ -6,6 +6,9 @@
   "scripts": {
     "dev": "tsx watch src/server.ts",
     "client": "tsx src/client.ts",
+    "client1": "tsx src/client1.ts",
+    "client2": "tsx src/client2.ts",
+    "client3": "tsx src/client3.ts",
     "build": "tsc",
     "start": "node dist/server.js"
   },
