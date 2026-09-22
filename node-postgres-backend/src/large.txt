@@ -1,0 +1,10 @@
+Line 1: Learning Node.js streams
+Line 2: A Readable stream reads data in chunks
+Line 3: A Writable stream writes data in chunks
+Line 4: This is better than loading the whole file into memory
+Line 5: Chunk 1 ----- AAAAAAAA
+Line 6: Chunk 2 ----- BBBBBBBB
+Line 7: Chunk 3 ----- CCCCCCCC
+Line 8: Chunk 4 ----- DDDDDDDD
+Line 9: Chunk 5 ----- EEEEEEEE
+Line 10: End of large.txt practice file
