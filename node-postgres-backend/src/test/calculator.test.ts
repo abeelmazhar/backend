@@ -1,12 +1,20 @@
 import { describe, it, expect } from "vitest";
-import { add, multiply } from "../utils/calculator.js";
+import { calculateDiscount } from "../services/price.service.js";
 
-describe("Calculator", () => {
-  it("should add two numbers", () => {
-    expect(add(2, 3)).toBe(5);
+describe("calculateDiscount", () => {
+  it("should calculate 10% discount", () => {
+    expect(calculateDiscount(1000, 10)).toBe(900);
   });
 
-  it("should multiply two numbers", () => {
-    expect(multiply(4, 5)).toBe(20);
+  it("should calculate 50% discount", () => {
+    expect(calculateDiscount(1000, 50)).toBe(500);
+  });
+
+  it("should return original price for 0% discount", () => {
+    expect(calculateDiscount(1000, 0)).toBe(1000);
+  });
+
+  it("should reject discount above 100%", () => {
+    expect(() => calculateDiscount(1000, 101)).toThrow("Invalid discount");
   });
 });
