@@ -5,12 +5,11 @@
   "main": "index.js",
   "scripts": {
     "dev": "tsx watch src/server.ts",
-    "client": "tsx src/client.ts",
-    "client1": "tsx src/client1.ts",
-    "client2": "tsx src/client2.ts",
-    "client3": "tsx src/client3.ts",
     "build": "tsc",
-    "start": "node dist/server.js"
+    "start": "node dist/server.js",
+    "test": "vitest",
+    "test:run": "vitest run",
+    "test:coverage": "vitest run --coverage"
   },
   "keywords": [],
   "author": "",
@@ -25,7 +24,9 @@
   "devDependencies": {
     "@types/express": "^5.0.6",
     "@types/node": "^26.2.0",
+    "supertest": "^7.3.0",
     "tsx": "^4.23.12",
-    "typescript": "^7.0.2"
+    "typescript": "^7.0.2",
+    "vitest": "^5.0.1"
   }
 }
